@@ -1,22 +1,24 @@
 // MoneyMagnet v2.0 - Configuration
+// Lädt API-Schlüssel aus Umgebungsvariablen für Sicherheit
+
 const CONFIG = {
     APIs: {
         FINNHUB: {
-            KEY: 'd134r0pr01qv1k0ogipgd134r0pr01qv1k0ogiq0',
+            KEY: process.env.FINNHUB_API_KEY || '',
             BASE_URL: 'https://finnhub.io/api/v1',
             RATE_LIMIT: 60 // Requests pro Minute
         },
         ALPHA_VANTAGE: {
-            KEY: '20G28M62O8HVFIOW',
+            KEY: process.env.ALPHA_VANTAGE_API_KEY || '',
             BASE_URL: 'https://www.alphavantage.co/query',
             RATE_LIMIT: 5
         },
         COINGECKO: {
             BASE_URL: 'https://api.coingecko.com/api/v3',
-            RATE_LIMIT: 50
+            RATE_LIMIT: 50 // CoinGecko benötigt keinen API-Key für Basic Plan
         },
         HUGGINGFACE: {
-            TOKEN: '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',
+            TOKEN: process.env.HUGGINGFACE_TOKEN || '',
             MODEL: 'ProsusAI/finbert',
             BASE_URL: 'https://api-inference.huggingface.co/models/',
             RATE_LIMIT: 30
@@ -33,11 +35,11 @@ const CONFIG = {
     
     // App Settings
     SETTINGS: {
-        UPDATE_INTERVAL: 30000, // 30 Sekunden
+        UPDATE_INTERVAL: parseInt(process.env.UPDATE_INTERVAL) || 30000, // 30 Sekunden
         MAX_NEWS_ITEMS: 20,
         MAX_SIGNALS: 10,
         MAX_IDEAS: 5,
-        CACHE_DURATION: 300000, // 5 Minuten
+        CACHE_DURATION: parseInt(process.env.CACHE_DURATION) || 300000, // 5 Minuten
         RETRY_ATTEMPTS: 3,
         RETRY_DELAY: 2000
     },
@@ -63,12 +65,37 @@ const CONFIG = {
         API_LIMIT: 'API-Limit erreicht. Bitte versuchen Sie es später erneut.',
         NOT_FOUND: 'Die angeforderten Daten wurden nicht gefunden.',
         GENERIC: 'Ein unerwarteter Fehler ist aufgetreten.',
-        TIMEOUT: 'Die Anfrage hat zu lange gedauert.'
+        TIMEOUT: 'Die Anfrage hat zu lange gedauert.',
+        MISSING_API_KEY: 'API-Schlüssel fehlt. Bitte überprüfen Sie Ihre .env Datei.'
     }
 };
 
 // Utility Functions
 const Utils = {
+    // API Key Validation
+    validateApiKeys: () => {
+        const missingKeys = [];
+        
+        if (!CONFIG.APIs.FINNHUB.KEY || CONFIG.APIs.FINNHUB.KEY === 'demo_key') {
+            missingKeys.push('FINNHUB_API_KEY');
+        }
+        
+        if (!CONFIG.APIs.ALPHA_VANTAGE.KEY || CONFIG.APIs.ALPHA_VANTAGE.KEY === 'demo_key') {
+            missingKeys.push('ALPHA_VANTAGE_API_KEY');
+        }
+        
+        if (!CONFIG.APIs.HUGGINGFACE.TOKEN || CONFIG.APIs.HUGGINGFACE.TOKEN === 'demo_token') {
+            missingKeys.push('HUGGINGFACE_TOKEN');
+        }
+        
+        if (missingKeys.length > 0) {
+            console.warn('Fehlende API-Schlüssel:', missingKeys.join(', '));
+            console.warn('Bitte überprüfen Sie Ihre .env Datei');
+        }
+        
+        return missingKeys.length === 0;
+    },
+    
     // Format currency
     formatCurrency: (value, currency = 'USD') => {
         if (value === null || value === undefined) return 'N/A';
@@ -210,3 +237,8 @@ const CacheManager = {
         return item && Date.now() <= item.expiry;
     }
 };
+
+// Initialize API Key Validation
+document.addEventListener('DOMContentLoaded', () => {
+    Utils.validateApiKeys();
+});
