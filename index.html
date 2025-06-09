@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoneyMagnet - AI Financial Intelligence</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <span class="nav-logo">💰</span>
+                <span class="nav-title">MoneyMagnet</span>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link active">📊 Dashboard</a>
+                <a href="search.html" class="nav-link">🔍 Suche</a>
+                <button class="nav-btn" onclick="app.refreshData()">🔄 Aktualisieren</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1 class="hero-title">
+                <span class="gradient-text">AI-Powered</span><br>
+                Financial Intelligence
+            </h1>
+            <p class="hero-subtitle">
+                Live Marktdaten, KI-Analysen und Echtzeit-Signale für smarte Investoren
+            </p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="totalStocks">500+</div>
+                    <div class="stat-label">Aktien</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="totalCrypto">200+</div>
+                    <div class="stat-label">Cryptos</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="aiAnalyses">1000+</div>
+                    <div class="stat-label">KI-Analysen</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <div class="status-item">
+                    <div class="status-indicator live"></div>
+                    <span>Live Daten</span>
+                </div>
+                <div class="status-item">
+                    <div class="status-indicator ai"></div>
+                    <span>KI Aktiv</span>
+                </div>
+                <div class="status-item">
+                    <span>Letztes Update: <span id="lastUpdate">--:--</span></span>
+                </div>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="tab-nav">
+                <button class="tab-btn active" data-tab="signals">🤖 KI-Signale</button>
+                <button class="tab-btn" data-tab="news">📈 News</button>
+                <button class="tab-btn" data-tab="market">📊 Markt</button>
+                <button class="tab-btn" data-tab="ideas">💡 Ideen</button>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="tab-content">
+                <!-- KI Signale Tab -->
+                <div id="signals-tab" class="tab-pane active">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>🎯 Live Trading-Signale</h2>
+                            <div class="signal-stats">
+                                <span class="stat-badge">
+                                    <span id="bullishCount">0</span> Bullish
+                                </span>
+                                <span class="stat-badge">
+                                    <span id="bearishCount">0</span> Bearish
+                                </span>
+                            </div>
+                        </div>
+                        <div class="ai-banner">
+                            <div class="ai-icon">🤖</div>
+                            <div class="ai-text">
+                                <strong>FinBERT AI-Analyse:</strong> Unsere KI analysiert live Finanznachrichten und generiert automatisch Trading-Signale basierend auf Sentiment-Analyse.
+                            </div>
+                        </div>
+                        <div id="signals-container" class="signals-grid">
+                            <div class="loading">
+                                <div class="spinner"></div>
+                                <span>Generiere KI-Signale...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- News Tab -->
+                <div id="news-tab" class="tab-pane">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>📈 Aktuelle Finanznachrichten</h2>
+                        </div>
+                        <div id="news-container" class="news-grid">
+                            <div class="loading">
+                                <div class="spinner"></div>
+                                <span>Lade Nachrichten...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Markt Tab -->
+                <div id="market-tab" class="tab-pane">
+                    <div class="market-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2>📈 Top Gewinner</h2>
+                            </div>
+                            <div id="winners-container">
+                                <div class="loading">
+                                    <div class="spinner"></div>
+                                    <span>Lade Daten...</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h2>📉 Top Verlierer</h2>
+                            </div>
+                            <div id="losers-container">
+                                <div class="loading">
+                                    <div class="spinner"></div>
+                                    <span>Lade Daten...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>₿ Krypto News</h2>
+                        </div>
+                        <div id="crypto-news-container" class="news-grid">
+                            <div class="loading">
+                                <div class="spinner"></div>
+                                <span>Lade Krypto-News...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ideen Tab -->
+                <div id="ideas-tab" class="tab-pane">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>💡 Trading-Ideen des Tages</h2>
+                        </div>
+                        <div id="ideas-container">
+                            <div class="loading">
+                                <div class="spinner"></div>
+                                <span>Generiere Trading-Ideen...</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="disclaimer-card">
+                        <div class="disclaimer-header">
+                            <span class="warning-icon">⚠️</span>
+                            <strong>Wichtiger Haftungsausschluss</strong>
+                        </div>
+                        <p>
+                            Alle Trading-Ideen und KI-Analysen dienen nur zu Informationszwecken und stellen keine Anlageberatung dar. 
+                            Investitionen bergen Risiken und können zu Verlusten führen. Bitte konsultieren Sie einen qualifizierten 
+                            Finanzberater und führen Sie eigene Recherchen durch.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="footer-logo">💰</span>
+                    <span>MoneyMagnet</span>
+                </div>
+                <div class="footer-text">
+                    Powered by AI • Real-time Financial Data • Built with ❤️
+                </div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Datenschutz</a>
+                    <a href="#" class="footer-link">Impressum</a>
+                    <a href="#" class="footer-link">API</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="data/config.js"></script>
+    <script src="data/symbols.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/app.js"></script>
+
+    <script>
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', () => {
+            app.init();
+        });
+    </script>
+</body>
+</html>

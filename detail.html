@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asset Detail - MoneyMagnet</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <span class="nav-logo">💰</span>
+                <span class="nav-title">MoneyMagnet</span>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">📊 Dashboard</a>
+                <a href="search.html" class="nav-link">🔍 Suche</a>
+                <button class="back-btn" onclick="history.back()">← Zurück</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Loading State -->
+    <div class="detail-loading" id="detailLoading">
+        <div class="container">
+            <div class="loading-card">
+                <div class="spinner large"></div>
+                <h2>Lade Asset-Daten...</h2>
+                <p>Bitte warten Sie einen Moment.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error State -->
+    <div class="detail-error" id="detailError" style="display: none;">
+        <div class="container">
+            <div class="error-card">
+                <div class="error-icon">❌</div>
+                <h2>Fehler beim Laden</h2>
+                <p id="errorMessage">Die Daten konnten nicht geladen werden.</p>
+                <div class="error-actions">
+                    <button class="retry-btn" onclick="detailManager.retryLoad()">🔄 Erneut versuchen</button>
+                    <a href="search.html" class="back-btn">🔍 Zurück zur Suche</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="detail-main" id="detailContent" style="display: none;">
+        <div class="container">
+            <!-- Asset Header -->
+            <div class="asset-header">
+                <div class="asset-info">
+                    <div class="asset-logo" id="assetLogo">
+                        <span id="logoText"></span>
+                    </div>
+                    <div class="asset-details">
+                        <h1 class="asset-symbol" id="assetSymbol">LOADING</h1>
+                        <p class="asset-name" id="assetName">Loading...</p>
+                        <div class="asset-meta">
+                            <span class="asset-type" id="assetType">Stock</span>
+                            <span class="asset-exchange" id="assetExchange">NASDAQ</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="asset-price">
+                    <div class="price-current" id="currentPrice">$0.00</div>
+                    <div class="price-change" id="priceChange">+$0.00 (+0.00%)</div>
+                    <div class="price-time" id="priceTime">Real-time</div>
+                </div>
+            </div>
+
+            <!-- Key Metrics -->
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-label">Tageshoch</div>
+                    <div class="metric-value" id="dayHigh">$0.00</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Tagestief</div>
+                    <div class="metric-value" id="dayLow">$0.00</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Volumen</div>
+                    <div class="metric-value" id="volume">0</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Marktkapitalisierung</div>
+                    <div class="metric-value" id="marketCap">$0</div>
+                </div>
+            </div>
+
+            <!-- AI Analysis -->
+            <div class="ai-analysis-card" id="aiAnalysisCard" style="display: none;">
+                <div class="ai-header">
+                    <div class="ai-icon">🤖</div>
+                    <h2>KI-Marktanalyse</h2>
+                    <div class="ai-confidence" id="aiConfidence">0%</div>
+                </div>
+                <div class="ai-content" id="aiContent">
+                    Generiere KI-Analyse...
+                </div>
+            </div>
+
+            <!-- Chart Section -->
+            <div class="chart-section">
+                <div class="chart-header">
+                    <h2>📈 Live Chart</h2>
+                    <div class="chart-controls">
+                        <button class="chart-btn active" data-period="1D">1T</button>
+                        <button class="chart-btn" data-period="1W">1W</button>
+                        <button class="chart-btn" data-period="1M">1M</button>
+                        <button class="chart-btn" data-period="3M">3M</button>
+                        <button class="chart-btn" data-period="1Y">1J</button>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div id="tradingview_chart"></div>
+                </div>
+            </div>
+
+            <!-- Details Grid -->
+            <div class="details-grid">
+                <!-- Company Profile -->
+                <div class="detail-card">
+                    <h3>🏢 Unternehmensprofil</h3>
+                    <div id="companyProfile">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            <span>Lade Profil...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Key Statistics -->
+                <div class="detail-card">
+                    <h3>📊 Kennzahlen</h3>
+                    <div id="keyStats" class="stats-list">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            <span>Lade Kennzahlen...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- News Section -->
+            <div class="news-section">
+                <div class="news-header">
+                    <h2>📰 Aktuelle Nachrichten</h2>
+                    <button class="refresh-btn" onclick="detailManager.refreshNews()">🔄</button>
+                </div>
+                <div id="newsContainer" class="news-grid">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <span>Lade Nachrichten...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="footer-logo">💰</span>
+                    <span>MoneyMagnet</span>
+                </div>
+                <div class="footer-text">
+                    Powered by AI • Real-time Financial Data • Built with ❤️
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="data/config.js"></script>
+    <script src="data/symbols.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/detail.js"></script>
+
+    <script>
+        // Initialize Detail Page
+        document.addEventListener('DOMContentLoaded', () => {
+            detailManager.init();
+        });
+    </script>
+</body>
+</html>

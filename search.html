@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suche - MoneyMagnet</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <span class="nav-logo">💰</span>
+                <span class="nav-title">MoneyMagnet</span>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">📊 Dashboard</a>
+                <a href="search.html" class="nav-link active">🔍 Suche</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Search Header -->
+    <section class="search-hero">
+        <div class="container">
+            <h1 class="hero-title">
+                🔍 Aktien & Crypto <span class="gradient-text">Suche</span>
+            </h1>
+            <p class="hero-subtitle">
+                Finden Sie detaillierte Informationen zu über 500 Aktien und 200 Kryptowährungen
+            </p>
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <main class="search-main">
+        <div class="container">
+            <!-- Search Form -->
+            <div class="search-section">
+                <div class="search-filters">
+                    <button class="filter-btn active" data-type="all">🔍 Alle</button>
+                    <button class="filter-btn" data-type="stocks">📈 Aktien</button>
+                    <button class="filter-btn" data-type="crypto">₿ Crypto</button>
+                </div>
+
+                <div class="search-container">
+                    <div class="search-input-wrapper">
+                        <svg class="search-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                        <input 
+                            type="text" 
+                            class="search-input" 
+                            placeholder="Suche nach Aktien oder Kryptowährungen (z.B. AAPL, Bitcoin, Tesla)..." 
+                            id="searchInput"
+                            autocomplete="off"
+                        >
+                        <button class="search-clear" id="clearBtn" style="display: none;">✕</button>
+                    </div>
+                </div>
+
+                <!-- Search Suggestions -->
+                <div class="search-suggestions" id="suggestions">
+                    <div class="suggestion-category">
+                        <h3>📈 Beliebte Aktien</h3>
+                        <div class="suggestion-items">
+                            <button class="suggestion-item" data-symbol="AAPL" data-type="stock">
+                                <span class="suggestion-icon">🍎</span>
+                                <div class="suggestion-info">
+                                    <div class="suggestion-symbol">AAPL</div>
+                                    <div class="suggestion-name">Apple Inc.</div>
+                                </div>
+                            </button>
+                            <button class="suggestion-item" data-symbol="TSLA" data-type="stock">
+                                <span class="suggestion-icon">🚗</span>
+                                <div class="suggestion-info">
+                                    <div class="suggestion-symbol">TSLA</div>
+                                    <div class="suggestion-name">Tesla Inc.</div>
+                                </div>
+                            </button>
+                            <button class="suggestion-item" data-symbol="MSFT" data-type="stock">
+                                <span class="suggestion-icon">💻</span>
+                                <div class="suggestion-info">
+                                    <div class="suggestion-symbol">MSFT</div>
+                                    <div class="suggestion-name">Microsoft Corp.</div>
+                                </div>
+                            </button>
+                            <button class="suggestion-item" data-symbol="GOOGL" data-type="stock">
+                                <span class="suggestion-icon">🔍</span>
+                                <div class="suggestion-info">
+                                    <div class="suggestion-symbol">GOOGL</div>
+                                    <div class="suggestion-name">Alphabet Inc.</div>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="suggestion-category">
+                        <h3>₿ Top Kryptowährungen</h3>
+                        <div class="suggestion-items">
+                            <button class="suggestion-item" data-symbol="BTC" data-type="crypto">
+                                <span class="suggestion-icon">₿</span>
+                                <div class="suggestion-info">
+                                    <div class="suggestion-symbol">BTC</div>
+                                    <div class="suggestion-name">Bitcoin</div>
+                                </div>
+                            </button>
+                            <button class="suggestion-item" data-symbol="ETH" data-type="crypto">
+                                <span class="suggestion-icon">♦️</span>
+                                <div class="suggestion-info">
+                                    <div class="suggestion-symbol">ETH</div>
+                                    <div class="suggestion-name">Ethereum</div>
+                                </div>
+                            </button>
+                            <button class="suggestion-item" data-symbol="ADA" data-type="crypto">
+                                <span class="suggestion-icon">🔷</span>
+                                <div class="suggestion-info">
+                                    <div class="suggestion-symbol">ADA</div>
+                                    <div class="suggestion-name">Cardano</div>
+                                </div>
+                            </button>
+                            <button class="suggestion-item" data-symbol="SOL" data-type="crypto">
+                                <span class="suggestion-icon">☀️</span>
+                                <div class="suggestion-info">
+                                    <div class="suggestion-symbol">SOL</div>
+                                    <div class="suggestion-name">Solana</div>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Results -->
+            <div class="search-results" id="searchResults" style="display: none;">
+                <div class="results-header">
+                    <h2>Suchergebnisse</h2>
+                    <div class="results-count" id="resultsCount">0 Ergebnisse</div>
+                </div>
+                <div class="results-grid" id="resultsGrid">
+                    <!-- Results will be populated here -->
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div class="search-loading" id="searchLoading" style="display: none;">
+                <div class="spinner"></div>
+                <span>Suche läuft...</span>
+            </div>
+
+            <!-- Error State -->
+            <div class="search-error" id="searchError" style="display: none;">
+                <div class="error-icon">❌</div>
+                <h3>Suchfehler</h3>
+                <p id="errorMessage">Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.</p>
+                <button class="retry-btn" onclick="searchManager.retrySearch()">🔄 Erneut versuchen</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="footer-logo">💰</span>
+                    <span>MoneyMagnet</span>
+                </div>
+                <div class="footer-text">
+                    Powered by AI • Real-time Financial Data • Built with ❤️
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="data/config.js"></script>
+    <script src="data/symbols.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/search.js"></script>
+
+    <script>
+        // Initialize Search
+        document.addEventListener('DOMContentLoaded', () => {
+            searchManager.init();
+        });
+    </script>
+</body>
+</html>
