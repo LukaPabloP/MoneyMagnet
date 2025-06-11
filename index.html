@@ -20,6 +20,7 @@
                 <a href="index.html" class="nav-link active">📊 Dashboard</a>
                 <a href="search.html" class="nav-link">🔍 Suche</a>
                 <button class="nav-btn" onclick="app.refreshData()">🔄 Aktualisieren</button>
+                <button class="nav-btn" onclick="app.showAPIStatus()" style="margin-left: 0.5rem;">📊 Status</button>
             </div>
         </div>
     </nav>
@@ -47,6 +48,10 @@
                     <div class="stat-number" id="aiAnalyses">1000+</div>
                     <div class="stat-label">KI-Analysen</div>
                 </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="apiSources">8</div>
+                    <div class="stat-label">API-Quellen</div>
+                </div>
             </div>
         </div>
     </section>
@@ -54,7 +59,7 @@
     <!-- Main Content -->
     <main class="main-content">
         <div class="container">
-            <!-- Status Bar -->
+            <!-- Enhanced Status Bar -->
             <div class="status-bar">
                 <div class="status-item">
                     <div class="status-indicator live"></div>
@@ -65,7 +70,21 @@
                     <span>KI Aktiv</span>
                 </div>
                 <div class="status-item">
+                    <span>APIs: <span id="apiCount">8</span></span>
+                </div>
+                <div class="status-item">
+                    <span>Fallback: <span id="fallbackStatus">Bereit</span></span>
+                </div>
+                <div class="status-item">
                     <span>Letztes Update: <span id="lastUpdate">--:--</span></span>
+                </div>
+            </div>
+
+            <!-- Enhanced AI Banner -->
+            <div class="ai-banner">
+                <div class="ai-icon">🤖</div>
+                <div class="ai-text">
+                    <strong>Enhanced MoneyMagnet v2.0:</strong> Nutzt jetzt 8 APIs (Yahoo Finance, NewsAPI, ExchangeRate-API, Polygon.io) mit intelligentem Fallback-System und realistischen Simulationen bei API-Limits.
                 </div>
             </div>
 
@@ -83,7 +102,7 @@
                 <div id="signals-tab" class="tab-pane active">
                     <div class="card">
                         <div class="card-header">
-                            <h2>🎯 Live Trading-Signale</h2>
+                            <h2>🎯 Enhanced Trading-Signale</h2>
                             <div class="signal-stats">
                                 <span class="stat-badge">
                                     <span id="bullishCount">0</span> Bullish
@@ -94,15 +113,15 @@
                             </div>
                         </div>
                         <div class="ai-banner">
-                            <div class="ai-icon">🤖</div>
+                            <div class="ai-icon">🚀</div>
                             <div class="ai-text">
-                                <strong>FinBERT AI-Analyse:</strong> Unsere KI analysiert live Finanznachrichten und generiert automatisch Trading-Signale basierend auf Sentiment-Analyse.
+                                <strong>Multi-Source KI-Analyse:</strong> Kombiniert Yahoo Finance Premium-Daten, NewsAPI Nachrichten und FinBERT AI für präzise Trading-Signale. Bei API-Limits nutzt intelligente technische Simulation.
                             </div>
                         </div>
                         <div id="signals-container" class="signals-grid">
                             <div class="loading">
                                 <div class="spinner"></div>
-                                <span>Generiere KI-Signale...</span>
+                                <span>Generiere erweiterte KI-Signale...</span>
                             </div>
                         </div>
                     </div>
@@ -112,12 +131,15 @@
                 <div id="news-tab" class="tab-pane">
                     <div class="card">
                         <div class="card-header">
-                            <h2>📈 Aktuelle Finanznachrichten</h2>
+                            <h2>📈 Enhanced Finanznachrichten</h2>
+                            <div class="signal-stats">
+                                <span class="stat-badge" id="newsSource">NewsAPI</span>
+                            </div>
                         </div>
                         <div id="news-container" class="news-grid">
                             <div class="loading">
                                 <div class="spinner"></div>
-                                <span>Lade Nachrichten...</span>
+                                <span>Lade erweiterte Nachrichten...</span>
                             </div>
                         </div>
                     </div>
@@ -129,34 +151,43 @@
                         <div class="card">
                             <div class="card-header">
                                 <h2>📈 Top Gewinner</h2>
+                                <div class="signal-stats">
+                                    <span class="stat-badge" id="winnersSource">Multi-Source</span>
+                                </div>
                             </div>
                             <div id="winners-container">
                                 <div class="loading">
                                     <div class="spinner"></div>
-                                    <span>Lade Daten...</span>
+                                    <span>Lade erweiterte Daten...</span>
                                 </div>
                             </div>
                         </div>
                         <div class="card">
                             <div class="card-header">
                                 <h2>📉 Top Verlierer</h2>
+                                <div class="signal-stats">
+                                    <span class="stat-badge" id="losersSource">Multi-Source</span>
+                                </div>
                             </div>
                             <div id="losers-container">
                                 <div class="loading">
                                     <div class="spinner"></div>
-                                    <span>Lade Daten...</span>
+                                    <span>Lade erweiterte Daten...</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="card">
                         <div class="card-header">
-                            <h2>₿ Krypto News</h2>
+                            <h2>₿ Enhanced Krypto News</h2>
+                            <div class="signal-stats">
+                                <span class="stat-badge" id="cryptoNewsSource">NewsAPI</span>
+                            </div>
                         </div>
                         <div id="crypto-news-container" class="news-grid">
                             <div class="loading">
                                 <div class="spinner"></div>
-                                <span>Lade Krypto-News...</span>
+                                <span>Lade erweiterte Krypto-News...</span>
                             </div>
                         </div>
                     </div>
@@ -166,22 +197,32 @@
                 <div id="ideas-tab" class="tab-pane">
                     <div class="card">
                         <div class="card-header">
-                            <h2>💡 Trading-Ideen des Tages</h2>
+                            <h2>💡 Enhanced Trading-Ideen</h2>
+                            <div class="signal-stats">
+                                <span class="stat-badge" id="ideasSource">Multi-API</span>
+                            </div>
+                        </div>
+                        <div class="ai-banner">
+                            <div class="ai-icon">💡</div>
+                            <div class="ai-text">
+                                <strong>Strategische KI-Analyse:</strong> Nutzt Marktdaten von mehreren Premium-Quellen für erweiterte Trading-Strategien und Risikobewertung.
+                            </div>
                         </div>
                         <div id="ideas-container">
                             <div class="loading">
                                 <div class="spinner"></div>
-                                <span>Generiere Trading-Ideen...</span>
+                                <span>Generiere erweiterte Trading-Ideen...</span>
                             </div>
                         </div>
                     </div>
                     <div class="disclaimer-card">
                         <div class="disclaimer-header">
                             <span class="warning-icon">⚠️</span>
-                            <strong>Wichtiger Haftungsausschluss</strong>
+                            <strong>Enhanced Haftungsausschluss</strong>
                         </div>
                         <p>
-                            Alle Trading-Ideen und KI-Analysen dienen nur zu Informationszwecken und stellen keine Anlageberatung dar. 
+                            Alle Trading-Ideen und KI-Analysen basieren auf mehreren Datenquellen und dienen nur zu Informationszwecken. 
+                            Bei API-Limits werden realistische Simulationen verwendet. Dies stellt keine Anlageberatung dar. 
                             Investitionen bergen Risiken und können zu Verlusten führen. Bitte konsultieren Sie einen qualifizierten 
                             Finanzberater und führen Sie eigene Recherchen durch.
                         </p>
@@ -197,45 +238,259 @@
             <div class="footer-content">
                 <div class="footer-brand">
                     <span class="footer-logo">💰</span>
-                    <span>MoneyMagnet</span>
+                    <span>MoneyMagnet v2.0</span>
                 </div>
                 <div class="footer-text">
-                    Powered by AI • Real-time Financial Data • Built with ❤️
+                    Enhanced APIs • Smart Fallbacks • Real-time Intelligence • Built with ❤️
                 </div>
                 <div class="footer-links">
+                    <a href="#" class="footer-link">API Status</a>
                     <a href="#" class="footer-link">Datenschutz</a>
-                    <a href="#" class="footer-link">Impressum</a>
-                    <a href="#" class="footer-link">API</a>
+                    <a href="#" class="footer-link">Enhanced Features</a>
+                    <a href="#" class="footer-link">Fallback System</a>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- Scripts -->
+    <!-- Scripts in optimaler Reihenfolge -->
     <script src="data/config.js"></script>
-    <script src="data/symols.js"></script>
+    <script src="data/symbols.js"></script>
+    <script src="js/fallback-data.js"></script>
     <script src="js/api.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/app.js"></script>
 
     <script>
-        // Initialize App - Nach dem alle Scripts geladen sind
-        document.addEventListener('DOMContentLoaded', () => {
-            // Für index.html:
-            if (typeof app !== 'undefined') {
-                app.init();
-            }
-            
-            // Für search.html:
-            if (typeof searchManager !== 'undefined') {
-                searchManager.init();
-            }
-            
-            // Für detail.html:
-            if (typeof detailManager !== 'undefined') {
-                detailManager.init();
+        // Enhanced initialization with fallback support
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                console.log('🚀 Starting MoneyMagnet v2.0 Enhanced...');
+                
+                // Initialize with better error handling
+                if (typeof app !== 'undefined') {
+                    await app.init();
+                    
+                    // Update status indicators
+                    updateStatusIndicators();
+                    
+                    // Set up periodic status updates
+                    setInterval(updateStatusIndicators, 30000); // Every 30 seconds
+                    
+                } else {
+                    console.error('❌ App object not available');
+                    throw new Error('App initialization failed');
+                }
+                
+            } catch (error) {
+                console.error('❌ Critical initialization error:', error);
+                
+                // Show user-friendly error message
+                document.body.innerHTML = `
+                    <div style="
+                        display: flex; 
+                        align-items: center; 
+                        justify-content: center; 
+                        min-height: 100vh; 
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        color: white;
+                        font-family: Inter, sans-serif;
+                        text-align: center;
+                        padding: 2rem;
+                    ">
+                        <div style="
+                            background: rgba(255,255,255,0.1);
+                            backdrop-filter: blur(20px);
+                            border-radius: 20px;
+                            padding: 3rem;
+                            max-width: 500px;
+                        ">
+                            <h1 style="font-size: 3rem; margin-bottom: 1rem;">⚠️</h1>
+                            <h2 style="margin-bottom: 1rem;">Initialisierungsfehler</h2>
+                            <p style="margin-bottom: 2rem;">
+                                MoneyMagnet konnte nicht gestartet werden. 
+                                Bitte laden Sie die Seite neu oder überprüfen Sie Ihre Internetverbindung.
+                            </p>
+                            <button onclick="location.reload()" style="
+                                background: linear-gradient(135deg, #4f46e5, #7c3aed);
+                                color: white;
+                                border: none;
+                                padding: 1rem 2rem;
+                                border-radius: 10px;
+                                cursor: pointer;
+                                font-weight: 600;
+                            ">
+                                🔄 Seite neu laden
+                            </button>
+                        </div>
+                    </div>
+                `;
             }
         });
+
+        // Update status indicators in real-time
+        function updateStatusIndicators() {
+            try {
+                if (typeof app === 'undefined' || !app.initialized) return;
+                
+                const status = app.getStatus();
+                
+                // Update API count
+                const apiCountEl = document.getElementById('apiCount');
+                if (apiCountEl) {
+                    apiCountEl.textContent = status.enhancedAPIs.configured;
+                }
+                
+                // Update fallback status
+                const fallbackStatusEl = document.getElementById('fallbackStatus');
+                if (fallbackStatusEl && status.fallback) {
+                    fallbackStatusEl.textContent = status.fallback.fallbackActive ? 'Aktiv' : 'Bereit';
+                    fallbackStatusEl.style.color = status.fallback.fallbackActive ? '#f59e0b' : '#10b981';
+                }
+                
+                // Update source badges based on current data sources
+                updateSourceBadges(status);
+                
+            } catch (error) {
+                console.warn('Status update failed:', error.message);
+            }
+        }
+
+        // Update source badges to show which APIs are being used
+        function updateSourceBadges(status) {
+            const badges = {
+                newsSource: document.getElementById('newsSource'),
+                winnersSource: document.getElementById('winnersSource'),
+                losersSource: document.getElementById('losersSource'),
+                cryptoNewsSource: document.getElementById('cryptoNewsSource'),
+                ideasSource: document.getElementById('ideasSource')
+            };
+            
+            // Update based on available quotas and fallback status
+            Object.entries(badges).forEach(([key, element]) => {
+                if (!element) return;
+                
+                if (status.fallback.fallbackActive) {
+                    element.textContent = 'Simulation';
+                    element.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+                } else if (status.availableQuotas.yahoo > 0 || status.availableQuotas.news > 0) {
+                    element.textContent = 'Premium APIs';
+                    element.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                } else {
+                    element.textContent = 'Cache/Fallback';
+                    element.style.background = 'linear-gradient(135deg, #6b7280, #4b5563)';
+                }
+            });
+        }
+
+        // Enhanced global error handling
+        window.addEventListener('error', (event) => {
+            console.error('💥 Global error:', event.error);
+            
+            // Try to recover gracefully
+            if (event.error.message.includes('API') || event.error.message.includes('fetch')) {
+                console.log('🔄 API error detected - attempting fallback recovery');
+                
+                // Show user that we're switching to fallback
+                if (typeof UIManager !== 'undefined') {
+                    UIManager.showToast('API-Fehler - Wechsel zu Fallback-System', 'warning');
+                }
+                
+                // Force fallback mode
+                if (window.FallbackDataManager) {
+                    console.log('🔄 Forcing fallback mode due to errors');
+                }
+            }
+        });
+
+        // Performance monitoring
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                if (typeof performance !== 'undefined') {
+                    const perfData = performance.getEntriesByType('navigation')[0];
+                    if (perfData) {
+                        const loadTime = perfData.loadEventEnd - perfData.loadEventStart;
+                        console.log(`⚡ Enhanced MoneyMagnet loaded in ${loadTime.toFixed(0)}ms`);
+                        
+                        // Show load time if over 5 seconds
+                        if (loadTime > 5000 && typeof UIManager !== 'undefined') {
+                            UIManager.showToast(`App geladen in ${(loadTime/1000).toFixed(1)}s`, 'info');
+                        }
+                    }
+                }
+            }, 1000);
+        });
+
+        // Enhanced keyboard shortcuts
+        document.addEventListener('keydown', (event) => {
+            // Ctrl+R or F5 - Refresh data
+            if ((event.ctrlKey && event.key === 'r') || event.key === 'F5') {
+                event.preventDefault();
+                if (typeof app !== 'undefined' && app.refreshData) {
+                    app.refreshData();
+                    if (typeof UIManager !== 'undefined') {
+                        UIManager.showToast('Daten werden aktualisiert...', 'info');
+                    }
+                }
+            }
+            
+            // Ctrl+Shift+S - Show API status
+            if (event.ctrlKey && event.shiftKey && event.key === 'S') {
+                event.preventDefault();
+                if (typeof app !== 'undefined' && app.showAPIStatus) {
+                    app.showAPIStatus();
+                }
+            }
+            
+            // Ctrl+Shift+F - Force fallback mode (for testing)
+            if (event.ctrlKey && event.shiftKey && event.key === 'F') {
+                event.preventDefault();
+                if (window.FallbackDataManager) {
+                    console.log('🔄 Forcing fallback mode via keyboard shortcut');
+                    // Temporarily disable API checks
+                    Object.keys(CONFIG.RATE_LIMITS).forEach(api => {
+                        CONFIG.RATE_LIMITS[api].requests = 999;
+                    });
+                    if (typeof UIManager !== 'undefined') {
+                        UIManager.showToast('Fallback-Modus für Tests aktiviert', 'warning');
+                    }
+                }
+            }
+        });
+
+        // Network status monitoring
+        window.addEventListener('online', () => {
+            console.log('🌐 Network restored - resuming API calls');
+            if (typeof UIManager !== 'undefined') {
+                UIManager.showToast('Internetverbindung wiederhergestellt', 'success');
+            }
+        });
+
+        window.addEventListener('offline', () => {
+            console.log('🚫 Network lost - switching to cache/fallback mode');
+            if (typeof UIManager !== 'undefined') {
+                UIManager.showToast('Offline-Modus - Cache und Fallback aktiv', 'warning');
+            }
+        });
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (typeof app !== 'undefined' && app.cleanup) {
+                app.cleanup();
+            }
+        });
+
+        // Development helpers (only in console)
+        if (typeof console !== 'undefined') {
+            console.log(`
+🚀 MoneyMagnet v2.0 Enhanced - Debug Commands:
+📊 window.MoneyMagnet.showAPIStatus() - Zeige API-Status
+🔄 window.MoneyMagnet.getUsageReport() - API-Nutzungsreport  
+🏥 window.MoneyMagnet.getHealthCheck() - Gesundheitscheck
+🔧 window.MoneyMagnet.resetDailyLimits() - Reset für Tests
+⌨️  Shortcuts: Ctrl+Shift+S (Status), Ctrl+Shift+F (Fallback), Ctrl+R (Refresh)
+            `);
+        }
     </script>
 </body>
 </html>

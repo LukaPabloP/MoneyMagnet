@@ -13,6 +13,7 @@ config/secrets.js
 config/keys.js
 *.key
 *.pem
+./data/config.js
 
 # Node.js
 node_modules/
