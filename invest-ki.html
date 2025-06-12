@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investment KI - MoneyMagnet v2.0</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/investment.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <span class="nav-logo">💰</span>
+                <span class="nav-title">MoneyMagnet</span>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">📊 Dashboard</a>
+                <a href="search.html" class="nav-link">🔍 Suche</a>
+                <a href="investment.html" class="nav-link active">🤖 Investment KI</a>
+                <button class="nav-btn" onclick="investmentAI.showStatus()">📊 Status</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Investment KI Hero -->
+    <section class="investment-hero">
+        <div class="container">
+            <h1 class="hero-title">
+                <span class="gradient-text">KI-gesteuerte</span><br>
+                Investment-Strategien
+            </h1>
+            <p class="hero-subtitle">
+                Personalisierte Anlageempfehlungen basierend auf Echzeit-Marktdaten von globalen Börsen
+            </p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="analyzedStocks">0</div>
+                    <div class="stat-label">Analysierte Aktien</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="marketCoverage">0</div>
+                    <div class="stat-label">Märkte weltweit</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="aiPredictions">0</div>
+                    <div class="stat-label">KI-Vorhersagen</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="investment-main">
+        <div class="container">
+            <!-- Investment Wizard -->
+            <div class="investment-wizard" id="investmentWizard">
+                <!-- Progress Bar -->
+                <div class="progress-container">
+                    <div class="progress-steps">
+                        <div class="progress-step active" data-step="1">
+                            <div class="progress-step-number">1</div>
+                            <span>Betrag & Frequenz</span>
+                        </div>
+                        <div class="progress-step" data-step="2">
+                            <div class="progress-step-number">2</div>
+                            <span>Zeitraum & Ziele</span>
+                        </div>
+                        <div class="progress-step" data-step="3">
+                            <div class="progress-step-number">3</div>
+                            <span>Risikoprofil</span>
+                        </div>
+                        <div class="progress-step" data-step="4">
+                            <div class="progress-step-number">4</div>
+                            <span>Strategie</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-bar-fill" id="progressFill"></div>
+                    </div>
+                </div>
+
+                <!-- Step 1: Amount & Frequency -->
+                <div class="wizard-step active" data-step="1">
+                    <div class="step-content">
+                        <h2 class="step-title">Wie viel möchten Sie investieren?</h2>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Investitionsbetrag (EUR)</label>
+                            <div class="amount-input-group">
+                                <input type="range" class="slider" id="amountSlider" min="50" max="50000" value="1000" step="50">
+                                <input type="number" class="amount-input" id="amountInput" min="50" max="50000" value="1000" step="50">
+                            </div>
+                            <div class="amount-presets">
+                                <button class="preset-btn" data-amount="500">500€</button>
+                                <button class="preset-btn" data-amount="1000">1.000€</button>
+                                <button class="preset-btn" data-amount="5000">5.000€</button>
+                                <button class="preset-btn" data-amount="10000">10.000€</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Investitionsfrequenz</label>
+                            <select id="frequencySelect" class="form-select">
+                                <option value="once">Einmalig</option>
+                                <option value="weekly">Wöchentlich</option>
+                                <option value="monthly" selected>Monatlich</option>
+                                <option value="quarterly">Quartalsweise</option>
+                                <option value="yearly">Jährlich</option>
+                            </select>
+                        </div>
+
+                        <div class="info-card">
+                            <div class="info-icon">💡</div>
+                            <div class="info-content">
+                                <strong>Gesamtinvestition über 12 Monate:</strong>
+                                <span id="totalInvestment" class="highlight">12.000€</span>
+                                <p>Regelmäßiges Investieren (Cost-Average-Effekt) kann Risiken reduzieren und langfristig bessere Ergebnisse erzielen.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step-actions">
+                        <button class="btn btn-primary" onclick="investmentAI.nextStep()">Weiter</button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Duration & Goals -->
+                <div class="wizard-step" data-step="2">
+                    <div class="step-content">
+                        <h2 class="step-title">Was sind Ihre Anlageziele?</h2>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Anlagehorizont</label>
+                            <div class="duration-display">
+                                <span id="durationText">3 Jahre</span>
+                            </div>
+                            <input type="range" class="slider" id="durationSlider" min="1" max="360" value="36" step="1">
+                            <div class="duration-labels">
+                                <span>1 Monat</span>
+                                <span>30 Jahre</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Hauptziel Ihrer Anlage</label>
+                            <div class="goal-cards">
+                                <label class="goal-card">
+                                    <input type="radio" name="goal" value="preservation" id="goalPreservation">
+                                    <div class="goal-content">
+                                        <div class="goal-icon">🛡️</div>
+                                        <div class="goal-title">Kapitalerhalt</div>
+                                        <div class="goal-desc">Sicherheit steht im Vordergrund</div>
+                                        <div class="goal-return">2-5% p.a.</div>
+                                    </div>
+                                </label>
+                                <label class="goal-card">
+                                    <input type="radio" name="goal" value="growth" id="goalGrowth" checked>
+                                    <div class="goal-content">
+                                        <div class="goal-icon">📈</div>
+                                        <div class="goal-title">Wachstum</div>
+                                        <div class="goal-desc">Langfristiger Vermögensaufbau</div>
+                                        <div class="goal-return">7-12% p.a.</div>
+                                    </div>
+                                </label>
+                                <label class="goal-card">
+                                    <input type="radio" name="goal" value="income" id="goalIncome">
+                                    <div class="goal-content">
+                                        <div class="goal-icon">💵</div>
+                                        <div class="goal-title">Einkommen</div>
+                                        <div class="goal-desc">Regelmäßige Ausschüttungen</div>
+                                        <div class="goal-return">4-8% p.a.</div>
+                                    </div>
+                                </label>
+                                <label class="goal-card">
+                                    <input type="radio" name="goal" value="speculation" id="goalSpeculation">
+                                    <div class="goal-content">
+                                        <div class="goal-icon">🚀</div>
+                                        <div class="goal-title">Spekulation</div>
+                                        <div class="goal-desc">Hohe Renditen, hohes Risiko</div>
+                                        <div class="goal-return">15-30%+ p.a.</div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step-actions">
+                        <button class="btn btn-secondary" onclick="investmentAI.previousStep()">Zurück</button>
+                        <button class="btn btn-primary" onclick="investmentAI.nextStep()">Weiter</button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Risk Profile -->
+                <div class="wizard-step" data-step="3">
+                    <div class="step-content">
+                        <h2 class="step-title">Wie ist Ihre Risikobereitschaft?</h2>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Risikotoleranz</label>
+                            <div class="risk-meter">
+                                <div class="risk-value" id="riskValue">5</div>
+                                <input type="range" class="slider risk-slider" id="riskSlider" min="1" max="10" value="5" step="1">
+                                <div class="risk-labels">
+                                    <span>Konservativ</span>
+                                    <span>Ausgewogen</span>
+                                    <span>Aggressiv</span>
+                                </div>
+                            </div>
+                            <p class="risk-description" id="riskDescription">Ausgewogenes Risiko - Mix aus Sicherheit und Wachstum</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Bei einem Verlust von 20% würden Sie...</label>
+                            <div class="reaction-cards">
+                                <label class="reaction-card">
+                                    <input type="radio" name="lossReaction" value="sell" id="reactionSell">
+                                    <div class="reaction-content">
+                                        <div class="reaction-icon">📉</div>
+                                        <div class="reaction-title">Verkaufen</div>
+                                        <div class="reaction-desc">Verluste begrenzen</div>
+                                    </div>
+                                </label>
+                                <label class="reaction-card">
+                                    <input type="radio" name="lossReaction" value="hold" id="reactionHold" checked>
+                                    <div class="reaction-content">
+                                        <div class="reaction-icon">⏸️</div>
+                                        <div class="reaction-title">Halten</div>
+                                        <div class="reaction-desc">Abwarten und beobachten</div>
+                                    </div>
+                                </label>
+                                <label class="reaction-card">
+                                    <input type="radio" name="lossReaction" value="buy" id="reactionBuy">
+                                    <div class="reaction-content">
+                                        <div class="reaction-icon">📈</div>
+                                        <div class="reaction-title">Nachkaufen</div>
+                                        <div class="reaction-desc">Günstige Einstiegschance</div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Ihre Anlageerfahrung</label>
+                            <div class="experience-grid">
+                                <label class="experience-option">
+                                    <input type="radio" name="experience" value="beginner" id="expBeginner" checked>
+                                    <div class="experience-content">
+                                        <span class="experience-icon">🌱</span>
+                                        <span class="experience-label">Anfänger</span>
+                                    </div>
+                                </label>
+                                <label class="experience-option">
+                                    <input type="radio" name="experience" value="intermediate" id="expIntermediate">
+                                    <div class="experience-content">
+                                        <span class="experience-icon">🌿</span>
+                                        <span class="experience-label">Fortgeschritten</span>
+                                    </div>
+                                </label>
+                                <label class="experience-option">
+                                    <input type="radio" name="experience" value="expert" id="expExpert">
+                                    <div class="experience-content">
+                                        <span class="experience-icon">🌳</span>
+                                        <span class="experience-label">Experte</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step-actions">
+                        <button class="btn btn-secondary" onclick="investmentAI.previousStep()">Zurück</button>
+                        <button class="btn btn-primary" onclick="investmentAI.nextStep()">Weiter</button>
+                    </div>
+                </div>
+
+                <!-- Step 4: Strategy Selection -->
+                <div class="wizard-step" data-step="4">
+                    <div class="step-content">
+                        <h2 class="step-title">Ihre empfohlenen Anlagestrategien</h2>
+                        <p class="step-subtitle">Basierend auf Ihren Angaben empfiehlt die KI folgende Strategien:</p>
+                        
+                        <div class="strategy-grid" id="strategyGrid">
+                            <!-- Strategies will be dynamically loaded -->
+                        </div>
+                    </div>
+
+                    <div class="step-actions">
+                        <button class="btn btn-secondary" onclick="investmentAI.previousStep()">Zurück</button>
+                        <button class="btn btn-primary" id="analyzeBtn" onclick="investmentAI.startAnalysis()" disabled>
+                            <span class="btn-icon">🤖</span>
+                            KI-Analyse starten
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="investment-results" id="investmentResults" style="display: none;">
+                <!-- Portfolio Summary -->
+                <div class="results-header">
+                    <h2 class="results-title">Ihre KI-optimierte Anlagestrategie</h2>
+                    <div class="results-meta">
+                        <span class="risk-badge" id="portfolioRisk">Mittleres Risiko</span>
+                        <span class="update-time">Erstellt: <span id="createdTime"></span></span>
+                    </div>
+                </div>
+
+                <!-- Key Metrics -->
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-icon">💰</div>
+                        <div class="metric-label">Monatliche Investition</div>
+                        <div class="metric-value" id="monthlyAmount">0€</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon">📈</div>
+                        <div class="metric-label">Erwartete Rendite</div>
+                        <div class="metric-value" id="expectedReturn">0%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon">⚖️</div>
+                        <div class="metric-label">Sharpe Ratio</div>
+                        <div class="metric-value" id="sharpeRatio">0.0</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon">🎯</div>
+                        <div class="metric-label">KI-Konfidenz</div>
+                        <div class="metric-value" id="aiConfidence">0%</div>
+                    </div>
+                </div>
+
+                <!-- Portfolio Visualization -->
+                <div class="visualization-section">
+                    <div class="chart-container">
+                        <h3>Portfolio-Allokation</h3>
+                        <canvas id="portfolioChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Performance-Projektion</h3>
+                        <canvas id="projectionChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Detailed Recommendations -->
+                <div class="recommendations-section">
+                    <h3>Konkrete Anlageempfehlungen</h3>
+                    <div class="recommendations-grid" id="recommendationsGrid">
+                        <!-- Recommendations will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Performance Scenarios -->
+                <div class="scenarios-section">
+                    <h3>Performance-Szenarien</h3>
+                    <div class="scenarios-grid">
+                        <div class="scenario-card best">
+                            <div class="scenario-icon">🚀</div>
+                            <div class="scenario-label">Best Case</div>
+                            <div class="scenario-value" id="bestCase">+0%</div>
+                            <div class="scenario-desc">Optimistische Marktentwicklung</div>
+                        </div>
+                        <div class="scenario-card likely">
+                            <div class="scenario-icon">📊</div>
+                            <div class="scenario-label">Wahrscheinlich</div>
+                            <div class="scenario-value" id="likelyCase">+0%</div>
+                            <div class="scenario-desc">Realistische Erwartung</div>
+                        </div>
+                        <div class="scenario-card worst">
+                            <div class="scenario-icon">📉</div>
+                            <div class="scenario-label">Worst Case</div>
+                            <div class="scenario-value" id="worstCase">-0%</div>
+                            <div class="scenario-desc">Pessimistische Marktentwicklung</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="results-actions">
+                    <button class="btn btn-secondary" onclick="investmentAI.startOver()">
+                        <span class="btn-icon">🔄</span>
+                        Neue Analyse
+                    </button>
+                    <button class="btn btn-primary" onclick="investmentAI.exportPortfolio()">
+                        <span class="btn-icon">📥</span>
+                        Portfolio exportieren
+                    </button>
+                    <button class="btn btn-success" onclick="investmentAI.savePortfolio()">
+                        <span class="btn-icon">💾</span>
+                        Portfolio speichern
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading Overlay -->
+            <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+                <div class="loading-content">
+                    <div class="ai-loader">
+                        <div class="loader-circle"></div>
+                        <div class="loader-circle"></div>
+                        <div class="loader-circle"></div>
+                    </div>
+                    <h3>KI analysiert globale Märkte...</h3>
+                    <p id="loadingStatus">Sammle Echzeit-Daten von weltweiten Börsen...</p>
+                    <div class="loading-progress">
+                        <div class="loading-progress-bar" id="loadingProgress"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="footer-logo">💰</span>
+                    <span>MoneyMagnet Investment KI</span>
+                </div>
+                <div class="footer-text">
+                    KI-gesteuerte Anlageberatung • Globale Marktabdeckung • Keine Anlageberatung
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="data/config.js"></script>
+    <script src="data/symbols.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/investment-ai-engine.js"></script>
+    <script src="js/investment-ui.js"></script>
+    <script>
+        // Initialize Investment AI
+        document.addEventListener('DOMContentLoaded', () => {
+            investmentAI.init();
+        });
+    </script>
+</body>
+</html>
