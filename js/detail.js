@@ -1,4 +1,4 @@
-// MoneyMagnet v2.0 - Detail Manager
+// MoneyMagnet v2.0 - Detail Manager (KORRIGIERT)
 const detailManager = {
     currentSymbol: null,
     currentType: null,
@@ -51,7 +51,7 @@ const detailManager = {
         };
     },
 
-    // Load comprehensive asset data
+    // Load comprehensive asset data (KORRIGIERT)
     async loadAssetData() {
         try {
             console.log(`📊 Loading data for ${this.currentSymbol}...`);
@@ -63,9 +63,9 @@ const detailManager = {
                 assetType = symbolInfo?.type || 'stock';
             }
             
-            // Load asset data from API
-            this.assetData = await APIManager.withRetry(() => 
-                APIManager.getAssetData(this.currentSymbol, assetType)
+            // Load asset data from API (KORRIGIERT: getEnhancedAssetData)
+            this.assetData = await this.retryWithFallback(() => 
+                APIManager.getEnhancedAssetData(this.currentSymbol, assetType)
             );
             
             if (!this.assetData) {
@@ -86,6 +86,22 @@ const detailManager = {
         } catch (error) {
             console.error('❌ Failed to load asset data:', error);
             throw error;
+        }
+    },
+
+    // KORRIGIERT: Retry-Funktion hinzugefügt
+    async retryWithFallback(operation, maxRetries = CONFIG.SETTINGS.RETRY_ATTEMPTS) {
+        for (let attempt = 1; attempt <= maxRetries; attempt++) {
+            try {
+                return await operation();
+            } catch (error) {
+                if (attempt === maxRetries) {
+                    throw error;
+                }
+                
+                console.warn(`Detail API call failed (attempt ${attempt}/${maxRetries}):`, error.message);
+                await Utils.sleep(CONFIG.SETTINGS.RETRY_DELAY * attempt);
+            }
         }
     },
 
@@ -236,13 +252,9 @@ const detailManager = {
                 tvSymbol = `BINANCE:${this.currentSymbol}USDT`;
             }
             
-            // Initialize TradingView widget if script is loaded
-            if (typeof TradingView !== 'undefined') {
-                UIManager.initChart(tvSymbol);
-                console.log(`✅ Chart initialized for ${tvSymbol}`);
-            } else {
-                console.warn('TradingView script not loaded, chart will not be available');
-            }
+            // Initialize TradingView widget using UIManager
+            UIManager.initChart(tvSymbol);
+            console.log(`✅ Chart initialized for ${tvSymbol}`);
             
         } catch (error) {
             console.error('❌ Chart initialization failed:', error);
@@ -390,7 +402,7 @@ const detailManager = {
         }
     },
 
-    // Retry loading data
+    // Retry loading data (KORRIGIERT)
     async retryLoad() {
         console.log('🔄 Retrying data load...');
         

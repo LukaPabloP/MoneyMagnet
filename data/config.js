@@ -1,4 +1,4 @@
-// MoneyMagnet v2.0 - Enhanced API Configuration
+// MoneyMagnet v2.0 - Enhanced API Configuration (KORRIGIERT)
 // WICHTIG: Echte API-Keys sind jetzt konfiguriert
 
 const CONFIG = {
@@ -250,7 +250,7 @@ const APIKeys = {
     }
 };
 
-// Enhanced Utils with Smart Rate Limiting
+// Enhanced Utils with Smart Rate Limiting (KORRIGIERT - formatTime hinzugefügt)
 const Utils = {
     // Existing utility functions...
     formatCurrency: (value, currency = 'USD') => {
@@ -300,6 +300,7 @@ const Utils = {
         }
     },
     
+    // FEHLENDE FUNKTION HINZUGEFÜGT
     formatTime: (timestamp) => {
         try {
             const date = new Date(timestamp);

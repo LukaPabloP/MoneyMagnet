@@ -1,4 +1,4 @@
-// MoneyMagnet v2.0 - UI Manager
+// MoneyMagnet v2.0 - UI Manager (KORRIGIERT)
 const UIManager = {
     // Tab management
     initTabs() {
@@ -267,7 +267,7 @@ const UIManager = {
             // Debounced search
             const debouncedSearch = Utils.debounce((query) => {
                 if (window.searchManager) {
-                    window.searchManager.search(query);
+                    window.searchManager.performSearch(query);
                 }
             }, CONFIG.UI.DEBOUNCE_DELAY);
 
@@ -293,7 +293,7 @@ const UIManager = {
                 if (e.key === 'Enter') {
                     const query = e.target.value.trim();
                     if (query && window.searchManager) {
-                        window.searchManager.search(query);
+                        window.searchManager.performSearch(query);
                     }
                 }
             });
@@ -633,6 +633,20 @@ const UIManager = {
         const chartContainer = document.getElementById('tradingview_chart');
         if (!chartContainer) return;
 
+        // Check if TradingView is available
+        if (typeof TradingView === 'undefined') {
+            chartContainer.innerHTML = `
+                <div style="display: flex; align-items: center; justify-content: center; height: 400px; background: #f9fafb; border-radius: 12px;">
+                    <div style="text-align: center; color: #6b7280;">
+                        <div style="font-size: 2rem; margin-bottom: 1rem;">📈</div>
+                        <p>Chart wird geladen...</p>
+                        <p style="font-size: 0.8rem; margin-top: 0.5rem;">TradingView Widget</p>
+                    </div>
+                </div>
+            `;
+            return;
+        }
+
         // TradingView widget configuration
         new TradingView.widget({
             autosize: true,
@@ -661,11 +675,12 @@ const UIManager = {
                 
                 // Here you would update the chart period
                 // This would require TradingView widget API calls
+                this.showToast(`Chart-Zeitraum: ${btn.dataset.period}`, 'info');
             });
         });
     },
 
-    // Show/hide detail sections
+    // Show/hide detail sections (KORRIGIERT)
     showDetailContent() {
         const loading = document.getElementById('detailLoading');
         const error = document.getElementById('detailError');
@@ -696,6 +711,12 @@ const UIManager = {
         if (error) error.style.display = 'flex';
         if (content) content.style.display = 'none';
         if (errorMessage) errorMessage.textContent = message;
+    },
+
+    // FEHLENDE FUNKTION HINZUGEFÜGT
+    hideDetailError() {
+        const error = document.getElementById('detailError');
+        if (error) error.style.display = 'none';
     },
 
     // Responsive design helpers

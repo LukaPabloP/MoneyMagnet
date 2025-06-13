@@ -1,4 +1,4 @@
-// MoneyMagnet v2.0 - Search Manager
+// MoneyMagnet v2.0 - Search Manager (KORRIGIERT)
 const searchManager = {
     currentFilter: 'all',
     lastQuery: '',
@@ -190,7 +190,7 @@ const searchManager = {
         }).sort((a, b) => b.score - a.score);
     },
 
-    // Search via API for unknown symbols
+    // Search via API for unknown symbols (KORRIGIERT)
     async searchAPI(symbol) {
         const results = [];
         const upperSymbol = symbol.toUpperCase();
@@ -323,7 +323,7 @@ const searchManager = {
         console.log(`🔗 Navigating to: ${url}`);
     },
 
-    // Retry search after error
+    // Retry search after error (KORRIGIERT)
     retrySearch() {
         if (this.lastQuery) {
             this.performSearch(this.lastQuery);
